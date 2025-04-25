@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Merit Rack Generator – Helldivers 2 Bootcamp 2025</title>
+  <style>
+    @font-face {
+      font-family: 'Ahkio';
+      src: url('Ahkio-Regular.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'PhutureODC';
+      src: url('PhutureODC-Ultra.ttf') format('truetype');
+    }
+
+    body {
+      background: #1e1e1e;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    canvas {
+      background-color: #2a2a2a;
+      border: 2px solid #555;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .inputs {
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    .inputs input[type="file"] {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Helldivers 2 Bootcamp: Merit Rack Generator</h1>
+  <tagline>Commendation Display System</tagline>
+
+  <div class="inputs">
+    <label>Enter your name: <input type="text" id="recruitName" placeholder="Cadet Sparklefoot"></label><br><br>
+    <div>
+      <strong>Upload your badges:</strong><br>
+      <input type="file" accept="image/*" class="badgeInput" />
+      <input type="file" accept="image/*" class="badgeInput" />
+      <input type="file" accept="image/*" class="badgeInput" />
+      <input type="file" accept="image/*" class="badgeInput" />
+      <input type="file" accept="image/*" class="badgeInput" />
+    </div>
+    <br>
+    <button onclick="drawPlaque()">Generate Plaque</button>
+    <button onclick="downloadPlaque()">Download Plaque</button>
+    <button onclick="resetForm()">Reset</button>
+  </div>
+
+  <canvas id="plaqueCanvas" width="1000" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById("plaqueCanvas");
+    const ctx = canvas.getContext("2d");
+    const slotSize = 120;
+    const padding = 40;
+    const slotCount = 5;
+    const spacing = (canvas.width - 2 * padding - (slotSize * slotCount)) / (slotCount - 1);
+    const slotY = 150;
+
+    function drawPlaque() {
+      ctx.fillStyle = "#2a2a2a";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw badge slots
+      let badgeInputs = document.querySelectorAll(".badgeInput");
+      badgeInputs.forEach((input, index) => {
+        const x = padding + index * (slotSize + spacing);
+        ctx.strokeStyle = "#999";
+        ctx.strokeRect(x, slotY, slotSize, slotSize);
+
+        const file = input.files[0];
+        if (file) {
+          const img = new Image();
+          img.onload = () => {
+            ctx.drawImage(img, x, slotY, slotSize, slotSize);
+          };
+          img.src = URL.createObjectURL(file);
+        }
+      });
+
+      // Draw name panel
+      const nameY = 300;
+      ctx.strokeStyle = "#666";
+      ctx.strokeRect(padding, nameY, canvas.width - 2 * padding, 60);
+
+      // Draw recruit name
+      const name = document.getElementById("recruitName").value;
+      ctx.fillStyle = "#ccc";
+      ctx.font = "28px 'Ahkio', 'PhutureODC', sans-serif";
+      ctx.fillText(name || "RECRUIT NAME", padding + 20, nameY + 40);
+    }
+
+    function downloadPlaque() {
+      const link = document.createElement("a");
+      link.download = "helldivers2_plaque.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    function resetForm() {
+      document.getElementById("recruitName").value = "";
+      document.querySelectorAll(".badgeInput").forEach(input => input.value = "");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#2a2a2a";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  </script>
+</body>
+</html>
