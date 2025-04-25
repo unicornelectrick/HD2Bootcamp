@@ -21,6 +21,24 @@
       padding: 20px;
     }
 
+    .hud-frame {
+  width: 1000px;
+  height: 420px;
+  background: #1e1e1e; /* temp background */
+  clip-path: polygon(
+    0% 10%,     /* left vertical slant */
+    5% 0%,
+    95% 0%,     /* top right shoulder */
+    100% 10%,
+    100% 90%,   /* bottom right slope */
+    95% 100%,
+    5% 100%,    /* bottom left slope */
+    0% 90%
+  );
+  border: 2px solid #555;
+  margin: 0 auto;
+}
+
     canvas {
       background-color: #2a2a2a;
       border: 2px solid #555;
@@ -58,8 +76,9 @@
     <button onclick="resetForm()">Reset</button>
   </div>
 
-  <canvas id="plaqueCanvas" width="1000" height="400"></canvas>
-
+  <div class="hud-frame">
+    <canvas id="plaqueCanvas" width="1000" height="400"></canvas>
+  </div>
   <script>
     const canvas = document.getElementById("plaqueCanvas");
     const ctx = canvas.getContext("2d");
