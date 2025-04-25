@@ -44,6 +44,16 @@
       border: 2px solid #555;
       border-radius: 10px;
       margin-top: 20px;
+        clip-path: polygon(
+    0% 10%,     /* left vertical slant */
+    5% 0%,
+    95% 0%,     /* top right shoulder */
+    100% 10%,
+    100% 90%,   /* bottom right slope */
+    95% 100%,
+    5% 100%,    /* bottom left slope */
+    0% 90%
+  );
     }
 
     .inputs {
@@ -76,9 +86,7 @@
     <button onclick="resetForm()">Reset</button>
   </div>
 
-  <div class="hud-frame">
     <canvas id="plaqueCanvas" width="1000" height="400"></canvas>
-  </div>
   <script>
     const canvas = document.getElementById("plaqueCanvas");
     const ctx = canvas.getContext("2d");
