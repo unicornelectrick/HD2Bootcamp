@@ -1,148 +1,539 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <title>Merit Rack Generator – Helldivers 2 Bootcamp 2025</title>
+  <title>HD2 Bootcamp 2025: Merit Rack Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     @font-face {
-      font-family: 'Ahkio';
-      src: url('Ahkio-Regular.ttf') format('truetype');
+      font-family: 'Insignia';
+      src: url('./fonts/Insignia Regular.otf Regular.otf') format('opentype');
     }
+
     @font-face {
       font-family: 'PhutureODC';
-      src: url('PhutureODC-Ultra.ttf') format('truetype');
+      src: url('./fonts/phutureodc-ultra.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: "FS_Sinclair";
+      src: url('./fonts/FS Sinclair Regular.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "FS_Sinclair_Lt";
+      src: url('./fonts/FS Sinclair Light.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
     }
 
     body {
-      background: #1e1e1e;
-      color: white;
-      font-family: sans-serif;
+      background: #1c1c1c url("https://unicornelectrick.github.io/hd2bc/Background.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 1080px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    h1,
+    h2 {
+      font-family: 'FS_Sinclair', sans-serif;
+      color: #ed766f;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    }
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .primary,
+    input[type="file"]::file-selector-button {
+      border: 1px solid #fce650;
+      background: #fce650;
+      color: #0e0e10;
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding-top: 5px;
+      margin-right: 5px;
+    }
+
+    .primary:hover,
+    input[type="file"]::file-selector-button:hover {
+      border: 1px solid #fff7ae;
+      background: #fff7ae;
+      color: #0e0e10;
+    }
+
+    .primary:active,
+    input[type="file"]::file-selector-button:active {
+      border: 1px solid #3d3e39;
+      background: #fff7ae;
+      color: #0e0e10;
+    }
+
+    .secondary {
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      border: 1px solid transparent;
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding-top: 5px;
+      margin-right: 5px;
+      color: #fff;
+    }
+
+    .secondary:hover {
+      border: 1px solid #fce650;
+      background: #fce650;
+      color: #0e0e10;
+    }
+
+    .secondary:active {
+      border: 1px solid #fff7ae;
+      background: #fff7ae;
+      color: #0e0e10;
+    }
+
+    .intro {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+    }
+
+    .intro figure {
+      margin-left: 0;
+      margin-bottom: 2rem;
+    }
+
+    .intro ol {
+      font-size: 1rem;
+    }
+
+    .intro figcaption {
+      margin-left: 0;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    label {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    input[type="file"],
+    input[type="text"] {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      color: #fff;
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      border: 1px solid #3d3e39;
+    }
+
+    input[type="file"] {
+      margin-bottom: 6px;
+      width: 50%;
+    }
+
+    input[type="file" i]:disabled,
+    input[type="file" i]:disabled:hover {
+      background: transparent;
+      border: transparent;
+    }
+
+    input[type="file" i]:disabled::file-selector-button,
+    input[type="file" i]:disabled::file-selector-button:hover {
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      color: gray;
+      border: transparent;
+    }
+
+    /* Animation for New Badge Inputs */
+    .highlight-new {
+      border: 2px solid #fce650;
+      animation: fadeBorder 3s ease-out forwards;
+    }
+
+    @keyframes fadeBorder {
+      0% {
+        border-color: #fce650;
+      }
+
+      100% {
+        border-color: transparent;
+      }
+    }
+
+    #badgeInputs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .buttons {
       text-align: center;
-      padding: 20px;
+      margin-top: 2rem;
     }
 
-    .hud-frame {
-  width: 1000px;
-  height: 420px;
-  background: #1e1e1e; /* temp background */
-  clip-path: polygon(
-    0% 10%,     /* left vertical slant */
-    5% 0%,
-    95% 0%,     /* top right shoulder */
-    100% 10%,
-    100% 90%,   /* bottom right slope */
-    95% 100%,
-    5% 100%,    /* bottom left slope */
-    0% 90%
-  );
-  border: 2px solid #555;
-  margin: 0 auto;
-}
+    .outer-border {
+      width: auto;
+      max-width: 320px;
+      min-width: 140px;
+      /* 340 */
+      color: white;
+      position: relative;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      margin: .5rem auto;
+      border: 2px solid #fce650;
 
-    canvas {
-      background-color: #2a2a2a;
-      border: 2px solid #555;
-      border-radius: 10px;
-      margin-top: 20px;
-        clip-path: polygon(
-    0% 10%,     /* left vertical slant */
-    5% 0%,
-    95% 0%,     /* top right shoulder */
-    100% 10%,
-    100% 90%,   /* bottom right slope */
-    95% 100%,
-    5% 100%,    /* bottom left slope */
-    0% 90%
-  );
+      background: #222325;
+
+      padding: .5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .inputs {
-      margin: 20px auto;
-      max-width: 800px;
+    .merit-badge-rack {
+      width: auto;
+      /* max-width: 540px; */
+      min-width: 140px;
+      height: 140px;
+      color: white;
+      position: relative;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      border: 1px double #555;
+
+
+      background: #1c1c1c url("https://unicornelectrick.github.io/hd2bc/Background.png");
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: right;
+
+      padding: .75rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .inputs input[type="file"] {
-      margin: 5px;
+    .merit-badge-rack p {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-weight: normal;
+      margin: 0;
+    }
+
+    .date {
+      font-size: .75rem;
+      color: #fce650;
+    }
+
+    .rack-name {
+      text-transform: uppercase;
+      font-size: .75rem;
+      color: #c4c4c4;
+    }
+
+    .little-lines {
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      height: 5px;
+      width: 50px;
+    }
+
+    .badge-content {
+      padding: .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: .5rem;
+      transition: all 0.3s ease;
+    }
+
+    .border-box {
+      background: #383411;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      position: relative;
+      width: 47.5px;
+      height: 65px;
+      border: 1px solid #fce650;
+      border-radius: 5px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .icon {
+      color: black;
+      font-weight: bold;
+      font-size: 2rem;
+      /* width: 62.5px;
+      height: 125px; */
+      width: 31.25px;
+      height: 62.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon img {
+      width: 50%;
+      height: 50%;
+      object-fit: contain;
+      padding: 5px;
+    }
+
+    .corner {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 3px;
+      border-color: #edd759 transparent transparent transparent;
+    }
+
+    .corner.top-left {
+      top: 1px;
+      left: 1px;
+      transform: rotate(135deg);
+    }
+
+    .corner.top-right {
+      top: 1px;
+      right: 1px;
+      transform: rotate(-135deg);
+    }
+
+    .corner.bottom-left {
+      bottom: 1px;
+      left: 1px;
+      transform: rotate(45deg);
+    }
+
+    .corner.bottom-right {
+      bottom: 1px;
+      right: 1px;
+      transform: rotate(-45deg);
+    }
+
+    hr {
+      border: none;
+      border-top: 3px double #fce650;
+      color: #fce650;
+      overflow: visible;
+      text-align: center;
+      height: 5px;
+      width: 100%;
+      margin: 2rem 0;
+    }
+
+    hr::after {
+      content: '';
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background-image: url('./helldivers.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0 4px;
+      position: relative;
+      top: -12px;
     }
   </style>
 </head>
+
 <body>
-  <h1>Helldivers 2 Bootcamp: Merit Rack Generator</h1>
-  <tagline>Commendation Display System</tagline>
+  <div class="container">
 
-  <div class="inputs">
-    <label>Enter your name: <input type="text" id="recruitName" placeholder="Cadet Sparklefoot"></label><br><br>
-    <div>
-      <strong>Upload your badges:</strong><br>
-      <input type="file" accept="image/*" class="badgeInput" />
-      <input type="file" accept="image/*" class="badgeInput" />
-      <input type="file" accept="image/*" class="badgeInput" />
-      <input type="file" accept="image/*" class="badgeInput" />
-      <input type="file" accept="image/*" class="badgeInput" />
+    <h1>Helldivers 2 Bootcamp 2025</h1>
+    <h2>Merit Rack Generator</h2>
+    <div class="intro">
+      <p>Greetings, Helldiver:</p>
+      <p>This application enables you to build and download a
+        digital badge
+        rack
+        of your achievements during the HD2 Bootcamp.</p>
+      <p>High Command encourages the displaying of this token in the digital space of your choice (e.g. Twitch "About"
+        panels, Discord, personal portals, etc.). Thank you for your continued efforts in the Galactic War and may
+        Liberty
+        guide your steps.</p>
+
+      <hr />
+
+      <figure>
+        <figcaption class="highlight">How to build your merit rack:</figcaption>
+        <ol>
+          <li>Enter your name.</li>
+          <li>Click "Choose File" and select the badge you received from a Captain. Add any additional
+            badges in the same fashion.
+          </li>
+          <li>Click Reset to clear any mistakes.</li>
+          <li>Click Download Rack and check your downloads folder for your image.</li>
+        </ol>
+      </figure>
+
     </div>
-    <br>
-    <button onclick="drawPlaque()">Generate Plaque</button>
-    <button onclick="downloadPlaque()">Download Plaque</button>
-    <button onclick="resetForm()">Reset</button>
-  </div>
 
-    <canvas id="plaqueCanvas" width="1000" height="400"></canvas>
-  <script>
-    const canvas = document.getElementById("plaqueCanvas");
-    const ctx = canvas.getContext("2d");
-    const slotSize = 120;
-    const padding = 40;
-    const slotCount = 5;
-    const spacing = (canvas.width - 2 * padding - (slotSize * slotCount)) / (slotCount - 1);
-    const slotY = 150;
+    <div class="inputs">
+      <label>Preferred Name:</label><br><input type="text" id="recruitName"><br><br>
+      <label>Upload your badges:</label>
+      <div id="badgeInputs">
+        <input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)"
+          title="Upload badge" />
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="primary" onclick="downloadRack()">Download Rack</button>
+      <button class="secondary" onclick="resetForm()">Reset</button>
+    </div>
+    <hr />
+    <div class="outer-border" id="htmlRackPreview">
+      <div class="merit-badge-rack">
+        <p>Helldivers 2 Bootcamp <span class="date">/ 2025</span></p>
+        <p class="date">05.04.25 - 05.10.25</p>
+        <div class="badge-content" id="badgeContent"></div>
+        <p id="rackName" class="rack-name"></p>
+      </div>
+    </div>
 
-    function drawPlaque() {
-      ctx.fillStyle = "#2a2a2a";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <script>
+      const badgeInputsDiv = document.getElementById("badgeInputs");
+      const badgeContent = document.getElementById("badgeContent");
+      const maxBadges = 5;
 
-      // Draw badge slots
-      let badgeInputs = document.querySelectorAll(".badgeInput");
-      badgeInputs.forEach((input, index) => {
-        const x = padding + index * (slotSize + spacing);
-        ctx.strokeStyle = "#999";
-        ctx.strokeRect(x, slotY, slotSize, slotSize);
-
-        const file = input.files[0];
-        if (file) {
-          const img = new Image();
-          img.onload = () => {
-            ctx.drawImage(img, x, slotY, slotSize, slotSize);
-          };
-          img.src = URL.createObjectURL(file);
+      function addNextBadgeInput(currentInput) {
+        const currentInputs = document.querySelectorAll('.badgeInput');
+        if (currentInputs.length < maxBadges) {
+          const newInput = document.createElement('input');
+          newInput.type = 'file';
+          newInput.accept = 'image/*';
+          newInput.className = 'badgeInput highlight-new';
+          newInput.title = `Upload badge ${currentInputs.length + 1}`;
+          newInput.onchange = function () { addNextBadgeInput(this); };
+          badgeInputsDiv.insertBefore(newInput, currentInput);
         }
+
+        if (currentInput.files.length > 0) {
+          currentInput.disabled = true;
+          currentInput.classList.remove('highlight-new');
+        }
+
+        updateHtmlRack();
+      }
+
+      function updateHtmlRack() {
+        badgeContent.innerHTML = '';
+        const inputs = Array.from(document.querySelectorAll('.badgeInput')).reverse();
+        inputs.forEach(input => {
+          if (input.files[0]) {
+            const box = document.createElement('div');
+            box.className = 'border-box';
+
+            const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+            corners.forEach(corner => {
+              const cornerDiv = document.createElement('div');
+              cornerDiv.className = `corner ${corner}`;
+              box.appendChild(cornerDiv);
+            });
+
+            const icon = document.createElement('div');
+            icon.className = 'icon';
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(input.files[0]);
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            icon.appendChild(img);
+
+            box.appendChild(icon);
+            badgeContent.appendChild(box);
+          }
+        });
+      }
+
+      function waitForImagesAndDownload(element, filename) {
+        const images = element.querySelectorAll('img');
+        const promises = [];
+
+        images.forEach((img) => {
+          if (!img.complete) {
+            promises.push(new Promise((resolve) => {
+              img.onload = img.onerror = resolve;
+            }));
+          }
+        });
+
+        Promise.all(promises).then(() => {
+          html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
+            const link = document.createElement("a");
+            link.download = filename;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+          });
+        });
+      }
+
+      function downloadRack() {
+        const rack = document.getElementById("htmlRackPreview");
+        const nameInput = document.getElementById("recruitName").value.trim().replace(/\s+/g, '_');
+
+        // Set the name dynamically in the preview
+        const rackName = document.getElementById("rackName");
+        if (nameInput) {
+          rackName.textContent = `Cadet ${nameInput}`;
+        } else {
+          rackName.textContent = "No Name Provided"; // Fallback if no name
+        }
+
+        // Set the filename
+        const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
+
+        // Call to generate and download the rack
+        waitForImagesAndDownload(rack, filename);
+      }
+
+      document.getElementById("recruitName").addEventListener("input", function () {
+        const rackName = document.getElementById("rackName");
+        const name = this.value.trim();
+        rackName.textContent = name ? `Cadet ${name}` : "";
       });
 
-      // Draw name panel
-      const nameY = 300;
-      ctx.strokeStyle = "#666";
-      ctx.strokeRect(padding, nameY, canvas.width - 2 * padding, 60);
 
-      // Draw recruit name
-      const name = document.getElementById("recruitName").value;
-      ctx.fillStyle = "#ccc";
-      ctx.font = "28px 'Ahkio', 'PhutureODC', sans-serif";
-      ctx.fillText(name || "RECRUIT NAME", padding + 20, nameY + 40);
-    }
+      function resetForm() {
+        document.getElementById("recruitName").value = "";
+        badgeInputsDiv.innerHTML = '<input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)" />';
+        badgeContent.innerHTML = '';
+        document.getElementById("rackName").textContent = "";
 
-    function downloadPlaque() {
-      const link = document.createElement("a");
-      link.download = "helldivers2_plaque.png";
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-
-    function resetForm() {
-      document.getElementById("recruitName").value = "";
-      document.querySelectorAll(".badgeInput").forEach(input => input.value = "");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#2a2a2a";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-  </script>
+      }
+    </script>
+  </div>
 </body>
+
 </html>
