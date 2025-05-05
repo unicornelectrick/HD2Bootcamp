@@ -372,14 +372,10 @@
     <h2>Merit Rack Generator</h2>
     <div class="intro">
       <p>Greetings, Helldiver:</p>
-      <p>This application enables you to build and download a
-        digital badge
-        rack
-        of your achievements during the HD2 Bootcamp.</p>
-      <p>High Command encourages the displaying of this token in the digital space of your choice (e.g. Twitch "About"
-        panels, Discord, personal portals, etc.). Thank you for your continued efforts in the Galactic War and may
-        Liberty
-        guide your steps.</p>
+      <p>This tool lets you build and download a digital badge rack showcasing your achievements during the Helldivers 2
+        Bootcamp.</p>
+      <p>High Command encourages you to display your rack proudl -- on Twitch panels, Discord profiles, or wherever
+        Liberty calls. Thank you for your continued efforts in the Galactic War.</p>
 
       <hr />
 
@@ -387,150 +383,148 @@
         <figcaption class="highlight">How to build your merit rack:</figcaption>
         <ol>
           <li>Enter your name.</li>
-          <li>Click "Choose File" and select the badge you received from a Captain. Add any additional
-            badges in the same fashion.
-          </li>
-          <li>Click Reset to clear any mistakes.</li>
-          <li>Click Download Rack and check your downloads folder for your image.</li>
+          <li>Click “Choose File” to upload the badge you received from your Captain. Add more badges the same way.</li>
+          <li>Click “Reset” to start over if needed.</li>
+          <li>Click “Download Rack” and check your downloads folder for the final image.</li>
         </ol>
       </figure>
-
     </div>
 
-    <div class="inputs">
-      <label>Preferred Name:</label><br><input type="text" id="recruitName"><br><br>
-      <label>Upload your badges:</label>
-      <div id="badgeInputs">
-        <input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)"
-          title="Upload badge" />
-      </div>
+  </div>
+
+  <div class="inputs">
+    <label>Preferred Name:</label><br><input type="text" id="recruitName"><br><br>
+    <label>Upload your badges:</label>
+    <div id="badgeInputs">
+      <input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)" title="Upload badge" />
     </div>
-    <div class="buttons">
-      <button class="primary" onclick="downloadRack()">Download Rack</button>
-      <button class="secondary" onclick="resetForm()">Reset</button>
+  </div>
+  <div class="buttons">
+    <button class="primary" onclick="downloadRack()">Download Rack</button>
+    <button class="secondary" onclick="resetForm()">Reset</button>
+  </div>
+  <hr />
+  <label>Preview:</label>
+  <div class="outer-border" id="htmlRackPreview">
+    <div class="merit-badge-rack">
+      <p>Helldivers 2 Bootcamp <span class="date">/ 2025</span></p>
+      <p class="date">05.04.25 - 05.10.25</p>
+      <div class="badge-content" id="badgeContent"></div>
+      <p id="rackName" class="rack-name"></p>
     </div>
-    <hr />
-    <label>Preview:</label>
-    <div class="outer-border" id="htmlRackPreview">
-      <div class="merit-badge-rack">
-        <p>Helldivers 2 Bootcamp <span class="date">/ 2025</span></p>
-        <p class="date">05.04.25 - 05.10.25</p>
-        <div class="badge-content" id="badgeContent"></div>
-        <p id="rackName" class="rack-name"></p>
-      </div>
-    </div>
+  </div>
 
-    <script>
-      const badgeInputsDiv = document.getElementById("badgeInputs");
-      const badgeContent = document.getElementById("badgeContent");
-      const maxBadges = 5;
+  <script>
+    const badgeInputsDiv = document.getElementById("badgeInputs");
+    const badgeContent = document.getElementById("badgeContent");
+    const maxBadges = 5;
 
-      function addNextBadgeInput(currentInput) {
-        const currentInputs = document.querySelectorAll('.badgeInput');
-        if (currentInputs.length < maxBadges) {
-          const newInput = document.createElement('input');
-          newInput.type = 'file';
-          newInput.accept = 'image/*';
-          newInput.className = 'badgeInput highlight-new';
-          newInput.title = `Upload badge ${currentInputs.length + 1}`;
-          newInput.onchange = function () { addNextBadgeInput(this); };
-          badgeInputsDiv.insertBefore(newInput, currentInput);
-        }
-
-        if (currentInput.files.length > 0) {
-          currentInput.disabled = true;
-          currentInput.classList.remove('highlight-new');
-        }
-
-        updateHtmlRack();
+    function addNextBadgeInput(currentInput) {
+      const currentInputs = document.querySelectorAll('.badgeInput');
+      if (currentInputs.length < maxBadges) {
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.accept = 'image/*';
+        newInput.className = 'badgeInput highlight-new';
+        newInput.title = `Upload badge ${currentInputs.length + 1}`;
+        newInput.onchange = function () { addNextBadgeInput(this); };
+        badgeInputsDiv.insertBefore(newInput, currentInput);
       }
 
-      function updateHtmlRack() {
-        badgeContent.innerHTML = '';
-        const inputs = Array.from(document.querySelectorAll('.badgeInput')).reverse();
-        inputs.forEach(input => {
-          if (input.files[0]) {
-            const box = document.createElement('div');
-            box.className = 'border-box';
-
-            const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
-            corners.forEach(corner => {
-              const cornerDiv = document.createElement('div');
-              cornerDiv.className = `corner ${corner}`;
-              box.appendChild(cornerDiv);
-            });
-
-            const icon = document.createElement('div');
-            icon.className = 'icon';
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(input.files[0]);
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            icon.appendChild(img);
-
-            box.appendChild(icon);
-            badgeContent.appendChild(box);
-          }
-        });
+      if (currentInput.files.length > 0) {
+        currentInput.disabled = true;
+        currentInput.classList.remove('highlight-new');
       }
 
-      function waitForImagesAndDownload(element, filename) {
-        const images = element.querySelectorAll('img');
-        const promises = [];
+      updateHtmlRack();
+    }
 
-        images.forEach((img) => {
-          if (!img.complete) {
-            promises.push(new Promise((resolve) => {
-              img.onload = img.onerror = resolve;
-            }));
-          }
-        });
+    function updateHtmlRack() {
+      badgeContent.innerHTML = '';
+      const inputs = Array.from(document.querySelectorAll('.badgeInput')).reverse();
+      inputs.forEach(input => {
+        if (input.files[0]) {
+          const box = document.createElement('div');
+          box.className = 'border-box';
 
-        Promise.all(promises).then(() => {
-          html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
-            const link = document.createElement("a");
-            link.download = filename;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
+          const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+          corners.forEach(corner => {
+            const cornerDiv = document.createElement('div');
+            cornerDiv.className = `corner ${corner}`;
+            box.appendChild(cornerDiv);
           });
-        });
-      }
 
-      function downloadRack() {
-        const rack = document.getElementById("htmlRackPreview");
-        const nameInput = document.getElementById("recruitName").value.trim().replace(/\s+/g, '_');
+          const icon = document.createElement('div');
+          icon.className = 'icon';
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(input.files[0]);
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'cover';
+          icon.appendChild(img);
 
-        // Set the name dynamically in the preview
-        const rackName = document.getElementById("rackName");
-        if (nameInput) {
-          rackName.textContent = `Cadet ${nameInput}`;
-        } else {
-          rackName.textContent = "No Name Provided"; // Fallback if no name
+          box.appendChild(icon);
+          badgeContent.appendChild(box);
         }
+      });
+    }
 
-        // Set the filename
-        const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
+    function waitForImagesAndDownload(element, filename) {
+      const images = element.querySelectorAll('img');
+      const promises = [];
 
-        // Call to generate and download the rack
-        waitForImagesAndDownload(rack, filename);
-      }
-
-      document.getElementById("recruitName").addEventListener("input", function () {
-        const rackName = document.getElementById("rackName");
-        const name = this.value.trim();
-        rackName.textContent = name ? `Cadet ${name}` : "";
+      images.forEach((img) => {
+        if (!img.complete) {
+          promises.push(new Promise((resolve) => {
+            img.onload = img.onerror = resolve;
+          }));
+        }
       });
 
+      Promise.all(promises).then(() => {
+        html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
+          const link = document.createElement("a");
+          link.download = filename;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      });
+    }
 
-      function resetForm() {
-        document.getElementById("recruitName").value = "";
-        badgeInputsDiv.innerHTML = '<input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)" />';
-        badgeContent.innerHTML = '';
-        document.getElementById("rackName").textContent = "";
+    function downloadRack() {
+      const rack = document.getElementById("htmlRackPreview");
+      const nameInput = document.getElementById("recruitName").value.trim().replace(/\s+/g, '_');
 
+      // Set the name dynamically in the preview
+      const rackName = document.getElementById("rackName");
+      if (nameInput) {
+        rackName.textContent = `Cadet ${nameInput}`;
+      } else {
+        rackName.textContent = "No Name Provided"; // Fallback if no name
       }
-    </script>
+
+      // Set the filename
+      const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
+
+      // Call to generate and download the rack
+      waitForImagesAndDownload(rack, filename);
+    }
+
+    document.getElementById("recruitName").addEventListener("input", function () {
+      const rackName = document.getElementById("rackName");
+      const name = this.value.trim();
+      rackName.textContent = name ? `Cadet ${name}` : "";
+    });
+
+
+    function resetForm() {
+      document.getElementById("recruitName").value = "";
+      badgeInputsDiv.innerHTML = '<input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)" />';
+      badgeContent.innerHTML = '';
+      document.getElementById("rackName").textContent = "";
+
+    }
+  </script>
   </div>
 </body>
 
