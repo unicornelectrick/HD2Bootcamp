@@ -568,6 +568,12 @@
           void htmlRack.offsetWidth;
           htmlRack.classList.add("shine-effect");
 
+          const specialImg = document.createElement("img");
+          specialImg.src = "./Golden_skull.png";
+          specialImg.id = "superBadgeIcon";
+          specialImg.className = "super-icon";
+          meritRack.appendChild(specialImg);
+
           if (nameInput) {
             rackName.textContent = `Super Cadet ${nameInput}`;
             rackName.classList.add("super-text");
@@ -576,6 +582,7 @@
           const allRackText = meritRack.querySelectorAll("p");
           allRackText.forEach(p => p.classList.add("super-text"));
         }
+
 
       }
 
