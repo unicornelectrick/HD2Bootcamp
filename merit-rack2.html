@@ -203,7 +203,6 @@
       font-family: sans-serif;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
       border: 2px solid #fce650;
 
       background: #222325;
@@ -392,6 +391,14 @@
     .super-corner {
       border-color: #f3df68 transparent transparent transparent !important;
     }
+
+    .outer-border.super-rack-border {
+      border: 2px solid #d1a73c !important;
+    }
+
+    .merit-badge-rack.super-rack-inner {
+      border: 1px double #d1a73c !important;
+    }
   </style>
 </head>
 
@@ -476,6 +483,7 @@
 
         // Reset any special styles or added icons
         meritRack.classList.remove("super-rack");
+
         const oldIcon = document.getElementById("superBadgeIcon");
         if (oldIcon) oldIcon.remove();
 
@@ -517,6 +525,9 @@
         // Apply 5th badge bonus features
         if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
           meritRack.classList.add("super-rack");
+          document.querySelector(".outer-border").classList.add("super-rack-border");
+          meritRack.classList.add("super-rack-inner");
+
 
           const specialImg = document.createElement("img");
           specialImg.src = "./Golden_skull.png"; // <-- Place this file in the same directory
@@ -535,24 +546,21 @@
         }
       }
 
+
       function waitForImagesAndDownload(element, filename) {
         const images = element.querySelectorAll('img');
         const promises = [];
-      
+
         images.forEach((img) => {
-          if (!img.complete || img.naturalWidth === 0) {
+          if (!img.complete) {
             promises.push(new Promise((resolve) => {
               img.onload = img.onerror = resolve;
             }));
           }
         });
-      
+
         Promise.all(promises).then(() => {
-          html2canvas(element, {
-            backgroundColor: null,
-            allowTaint: true,
-            useCORS: true
-          }).then(canvas => {
+          html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
             const link = document.createElement("a");
             link.download = filename;
             link.href = canvas.toDataURL("image/png");
@@ -567,14 +575,8 @@
 
         // Set the name dynamically in the preview
         const rackName = document.getElementById("rackName");
-        const badgeCount = document.querySelectorAll(".badgeInput")
-          ? Array.from(document.querySelectorAll(".badgeInput")).filter(input => input.files.length > 0).length
-          : 0;
-        
         if (nameInput) {
-          rackName.textContent = badgeCount === maxBadges
-            ? `Super Cadet ${nameInput}`
-            : `Cadet ${nameInput}`;
+          rackName.textContent = `Cadet ${nameInput}`;
         } else {
           rackName.textContent = "No Name Provided"; // Fallback if no name
         }
@@ -599,10 +601,14 @@
         badgeContent.innerHTML = '';
 
         const rackName = document.getElementById("rackName");
-        rackName.innerHTML = "";
+        rackName.textContent = "";
 
         const meritRack = document.querySelector(".merit-badge-rack");
         meritRack.classList.remove("super-rack");
+
+        document.querySelector(".outer-border").classList.remove("super-rack-border");
+        meritRack.classList.remove("super-rack-inner");
+
 
         const oldIcon = document.getElementById("superBadgeIcon");
         if (oldIcon) oldIcon.remove();
