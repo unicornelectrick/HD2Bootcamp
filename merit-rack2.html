@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="author" content="@haylinds">
+  <title>HD2 Bootcamp 2025: Merit Rack Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Insignia';
+      src: url('./fonts/Insignia Regular.otf Regular.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PhutureODC';
+      src: url('./fonts/phutureodc-ultra.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: "FS_Sinclair";
+      src: url('./fonts/FS Sinclair Regular.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "FS_Sinclair_Lt";
+      src: url('./fonts/FS Sinclair Light.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      background: #1c1c1c url("https://unicornelectrick.github.io/hd2bc/Background.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 1080px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    h1,
+    h2 {
+      font-family: 'FS_Sinclair', sans-serif;
+      color: #ed766f;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    }
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .primary,
+    input[type="file"]::file-selector-button {
+      border: 1px solid #fce650;
+      background: #fce650;
+      color: #0e0e10;
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding-top: 5px;
+      margin-right: 5px;
+    }
+
+    .primary:hover,
+    input[type="file"]::file-selector-button:hover {
+      border: 1px solid #fff7ae;
+      background: #fff7ae;
+      color: #0e0e10;
+    }
+
+    .primary:active,
+    input[type="file"]::file-selector-button:active {
+      border: 1px solid #3d3e39;
+      background: #fff7ae;
+      color: #0e0e10;
+    }
+
+    .secondary {
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      border: 1px solid transparent;
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding-top: 5px;
+      margin-right: 5px;
+      color: #fff;
+    }
+
+    .secondary:hover {
+      border: 1px solid #fce650;
+      background: #fce650;
+      color: #0e0e10;
+    }
+
+    .secondary:active {
+      border: 1px solid #fff7ae;
+      background: #fff7ae;
+      color: #0e0e10;
+    }
+
+    .intro {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+    }
+
+    .intro figure {
+      margin-left: 0;
+      margin-bottom: 2rem;
+    }
+
+    .intro ol {
+      font-size: 1rem;
+    }
+
+    .intro figcaption {
+      margin-left: 0;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    label {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    input[type="file"],
+    input[type="text"] {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-size: 1rem;
+      color: #fff;
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      border: 1px solid #3d3e39;
+    }
+
+    input[type="file"] {
+      margin-bottom: 6px;
+      width: 50%;
+    }
+
+    input[type="file" i]:disabled,
+    input[type="file" i]:disabled:hover {
+      background: transparent;
+      border: transparent;
+    }
+
+    input[type="file" i]:disabled::file-selector-button,
+    input[type="file" i]:disabled::file-selector-button:hover {
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      color: gray;
+      border: transparent;
+    }
+
+    /* Animation for New Badge Inputs */
+    .highlight-new {
+      border: 2px solid #fce650;
+      animation: fadeBorder 3s ease-out forwards;
+    }
+
+    @keyframes fadeBorder {
+      0% {
+        border-color: #fce650;
+      }
+
+      100% {
+        border-color: transparent;
+      }
+    }
+
+    #badgeInputs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .outer-border {
+      width: auto;
+      max-width: 320px;
+      min-width: 140px;
+      position: relative;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      border: 2px solid #fce650;
+
+      background: #222325;
+
+      padding: .5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .merit-badge-rack {
+      width: auto;
+      /* max-width: 540px; */
+      min-width: 140px;
+      height: 140px;
+      color: white;
+      position: relative;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      border: 1px double #555;
+
+
+      background: #1c1c1c url("https://unicornelectrick.github.io/hd2bc/Background.png");
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: right;
+
+      padding: .75rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .merit-badge-rack p {
+      font-family: 'FS_Sinclair', sans-serif;
+      font-weight: normal;
+      margin: 0;
+    }
+
+    .date {
+      font-size: .75rem;
+      color: #fce650;
+    }
+
+    .rack-name {
+      text-transform: uppercase;
+      font-size: .75rem;
+      color: #c4c4c4;
+    }
+
+    .little-lines {
+      background: repeating-linear-gradient(45deg, #3d3e39, #3d3e39 3px, transparent 3px, transparent 5px);
+      height: 5px;
+      width: 50px;
+    }
+
+    .badge-content {
+      padding: .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: .5rem;
+      transition: all 0.3s ease;
+    }
+
+    .border-box {
+      background: #383411;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      position: relative;
+      width: 47.5px;
+      height: 65px;
+      border: 1px solid #fce650;
+      border-radius: 5px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .icon {
+      color: black;
+      font-weight: bold;
+      font-size: 2rem;
+      /* width: 62.5px;
+      height: 125px; */
+      width: 31.25px;
+      height: 62.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon img {
+      width: 50%;
+      height: 50%;
+      object-fit: contain;
+      padding: 5px;
+    }
+
+    .corner {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 3px;
+      border-color: #edd759 transparent transparent transparent;
+    }
+
+    .corner.top-left {
+      top: 1px;
+      left: 1px;
+      transform: rotate(135deg);
+    }
+
+    .corner.top-right {
+      top: 1px;
+      right: 1px;
+      transform: rotate(-135deg);
+    }
+
+    .corner.bottom-left {
+      bottom: 1px;
+      left: 1px;
+      transform: rotate(45deg);
+    }
+
+    .corner.bottom-right {
+      bottom: 1px;
+      right: 1px;
+      transform: rotate(-45deg);
+    }
+
+    hr {
+      border: none;
+      border-top: 3px double #fce650;
+      color: #fce650;
+      overflow: visible;
+      text-align: center;
+      height: 5px;
+      width: 100%;
+      margin: 2rem 0;
+    }
+
+    hr::after {
+      content: '';
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background-image: url('./helldivers.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0 4px;
+      position: relative;
+      top: -12px;
+    }
+
+    .super-rack {
+      background: linear-gradient(90deg, #d1a73c, #a37208, #6a4715, #2e1d06);
+      background-size: cover;
+      background-blend-mode: overlay;
+    }
+
+    .super-icon {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 101px;
+      height: 101px;
+      z-index: 10;
+
+    }
+
+    .super-text {
+      color: #2e1d06 !important;
+      font-weight: 600 !important;
+    }
+
+    .super-border-box {
+      background: #5d3d10 !important;
+      border: 1px solid #f3df68 !important;
+    }
+
+    .super-corner {
+      border-color: #f3df68 transparent transparent transparent !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Helldivers 2 Bootcamp 2025</h1>
+    <h2>Merit Rack Generator</h2>
+    <div class="intro">
+      <p>Greetings, Helldiver:</p>
+      <p>This tool lets you build and download a digital badge rack showcasing your achievements during the Helldivers 2
+        Bootcamp.</p>
+      <p>High Command encourages you to display your rack proudl -- on Twitch panels, Discord profiles, or wherever
+        Liberty calls. Thank you for your continued efforts in the Galactic War.</p>
+      <hr />
+
+      <figure>
+        <figcaption class="highlight">How to build your merit rack:</figcaption>
+        <ol>
+          <li>Enter your name.</li>
+          <li>Click “Choose File” to upload the badge you received from your Captain. Add more badges the same way.</li>
+          <li>Click “Reset” to start over if needed.</li>
+          <li>Click “Download Rack” and check your downloads folder for the final image.</li>
+        </ol>
+      </figure>
+
+    </div>
+
+    <div class="inputs">
+      <label>Preferred Name:</label><br><input type="text" id="recruitName"><br><br>
+      <label>Upload your badges:</label>
+      <div id="badgeInputs">
+        <input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)"
+          title="Upload badge" />
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="primary" onclick="downloadRack()">Download Rack</button>
+      <button class="secondary" onclick="resetForm()">Reset</button>
+    </div>
+    <hr />
+    <label>Preview:</label>
+    <div class="outer-border" id="htmlRackPreview">
+      <div class="merit-badge-rack">
+        <p>Helldivers 2 Bootcamp <span class="date">/ 2025</span></p>
+        <p class="date">05.04.25 - 05.10.25</p>
+        <div class="badge-content" id="badgeContent"></div>
+        <p id="rackName" class="rack-name"></p>
+      </div>
+    </div>
+
+    <script>
+      const badgeInputsDiv = document.getElementById("badgeInputs");
+      const badgeContent = document.getElementById("badgeContent");
+      const maxBadges = 5;
+
+      function addNextBadgeInput(currentInput) {
+        const currentInputs = document.querySelectorAll('.badgeInput');
+        if (currentInputs.length < maxBadges) {
+          const newInput = document.createElement('input');
+          newInput.type = 'file';
+          newInput.accept = 'image/*';
+          newInput.className = 'badgeInput highlight-new';
+          newInput.title = `Upload badge ${currentInputs.length + 1}`;
+          newInput.onchange = function () { addNextBadgeInput(this); };
+          badgeInputsDiv.insertBefore(newInput, currentInput);
+        }
+
+        if (currentInput.files.length > 0) {
+          currentInput.disabled = true;
+          currentInput.classList.remove('highlight-new');
+        }
+
+        updateHtmlRack();
+      }
+
+      function updateHtmlRack() {
+        badgeContent.innerHTML = '';
+        const inputs = Array.from(document.querySelectorAll('.badgeInput')).reverse();
+        const meritRack = document.querySelector(".merit-badge-rack");
+        const rackName = document.getElementById("rackName");
+
+        // Reset any special styles or added icons
+        meritRack.classList.remove("super-rack");
+        const oldIcon = document.getElementById("superBadgeIcon");
+        if (oldIcon) oldIcon.remove();
+
+        let nameInput = document.getElementById("recruitName").value.trim();
+        rackName.textContent = nameInput ? `Cadet ${nameInput}` : "";
+
+        inputs.forEach(input => {
+          if (input.files[0]) {
+            const box = document.createElement('div');
+            box.className = 'border-box';
+            if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
+              box.classList.add('super-border-box');
+            }
+
+            const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+            corners.forEach(corner => {
+              const cornerDiv = document.createElement('div');
+              cornerDiv.className = `corner ${corner}`;
+              if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
+                cornerDiv.classList.add('super-corner');
+              }
+              box.appendChild(cornerDiv);
+            });
+
+            const icon = document.createElement('div');
+            icon.className = 'icon';
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(input.files[0]);
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            icon.appendChild(img);
+
+            box.appendChild(icon);
+            badgeContent.appendChild(box);
+          }
+        });
+
+        // Apply 5th badge bonus features
+        if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
+          meritRack.classList.add("super-rack");
+
+          const specialImg = document.createElement("img");
+          specialImg.src = "./Golden_skull.png"; // <-- Place this file in the same directory
+          specialImg.id = "superBadgeIcon";
+          specialImg.className = "super-icon";
+          meritRack.appendChild(specialImg);
+
+          if (nameInput) {
+            rackName.textContent = `Super Cadet ${nameInput}`;
+            rackName.classList.add("super-text");
+          }
+
+          const allRackText = meritRack.querySelectorAll("p");
+          allRackText.forEach(p => p.classList.add("super-text"));
+
+        }
+      }
+
+
+      function waitForImagesAndDownload(element, filename) {
+        const images = element.querySelectorAll('img');
+        const promises = [];
+
+        images.forEach((img) => {
+          if (!img.complete) {
+            promises.push(new Promise((resolve) => {
+              img.onload = img.onerror = resolve;
+            }));
+          }
+        });
+
+        Promise.all(promises).then(() => {
+          html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
+            const link = document.createElement("a");
+            link.download = filename;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+          });
+        });
+      }
+
+      function downloadRack() {
+        const rack = document.getElementById("htmlRackPreview");
+        const nameInput = document.getElementById("recruitName").value.trim().replace(/\s+/g, '_');
+
+        // Set the name dynamically in the preview
+        const rackName = document.getElementById("rackName");
+        if (nameInput) {
+          rackName.textContent = `Cadet ${nameInput}`;
+        } else {
+          rackName.textContent = "No Name Provided"; // Fallback if no name
+        }
+
+        // Set the filename
+        const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
+
+        // Call to generate and download the rack
+        waitForImagesAndDownload(rack, filename);
+      }
+
+      document.getElementById("recruitName").addEventListener("input", function () {
+        const rackName = document.getElementById("rackName");
+        const name = this.value.trim();
+        rackName.textContent = name ? `Cadet ${name}` : "";
+      });
+
+
+      function resetForm() {
+        document.getElementById("recruitName").value = "";
+        badgeInputsDiv.innerHTML = '<input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)" />';
+        badgeContent.innerHTML = '';
+
+        const rackName = document.getElementById("rackName");
+        rackName.textContent = "";
+
+        const meritRack = document.querySelector(".merit-badge-rack");
+        meritRack.classList.remove("super-rack");
+
+        const oldIcon = document.getElementById("superBadgeIcon");
+        if (oldIcon) oldIcon.remove();
+
+        // Remove super-text class from all <p> inside merit-badge-rack
+        const allRackText = document.querySelectorAll(".merit-badge-rack p");
+        allRackText.forEach(p => p.classList.remove("super-text"));
+
+      }
+
+    </script>
+  </div>
+</body>
+
+</html>
