@@ -370,11 +370,12 @@
 
     .super-icon {
       position: absolute;
-      top: -18px;
-      right: -20px;
-      width: 85px;
-      height: 85px;
+      top: -15px;
+      right: -15px;
+      width: 101px;
+      height: 101px;
       z-index: 10;
+
     }
 
     .super-text {
@@ -398,41 +399,6 @@
     .merit-badge-rack.super-rack-inner {
       border: 1px double #d1a73c !important;
     }
-
-    /* Animation only shows in HTML preview and not in the download */
-    #htmlRackPreview.shine-effect {
-      position: relative;
-      overflow: hidden;
-    }
-
-    #htmlRackPreview.shine-effect::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -75%;
-      width: 50%;
-      height: 100%;
-      z-index: 100;
-      /* Ensure it's above everything */
-      background: linear-gradient(120deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.3) 50%,
-          rgba(255, 255, 255, 0) 100%);
-      transform: skewX(-20deg);
-      animation: shine 1.8s ease-out 0s 1 forwards;
-      pointer-events: none;
-    }
-
-
-    @keyframes shine {
-      from {
-        left: -75%;
-      }
-
-      to {
-        left: 125%;
-      }
-    }
   </style>
 </head>
 
@@ -445,7 +411,7 @@
       <p>Greetings, Helldiver:</p>
       <p>This tool lets you build and download a digital badge rack showcasing your achievements during the Helldivers 2
         Bootcamp.</p>
-      <p>High Command encourages you to display your rack proudly -- on Twitch panels, Discord profiles, or wherever
+      <p>High Command encourages you to display your rack proudl -- on Twitch panels, Discord profiles, or wherever
         Liberty calls. Thank you for your continued efforts in the Galactic War.</p>
       <hr />
 
@@ -517,6 +483,8 @@
 
         // Reset any special styles or added icons
         meritRack.classList.remove("super-rack");
+        document.querySelector(".outer-border").classList.add("super-rack-border");
+        meritRack.classList.add("super-rack-inner");
 
         const oldIcon = document.getElementById("superBadgeIcon");
         if (oldIcon) oldIcon.remove();
@@ -559,16 +527,9 @@
         // Apply 5th badge bonus features
         if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
           meritRack.classList.add("super-rack");
-          document.querySelector(".outer-border").classList.add("super-rack-border");
-          meritRack.classList.add("super-rack-inner");
-
-          const htmlRack = document.getElementById("htmlRackPreview");
-          htmlRack.classList.remove("shine-effect");
-          void htmlRack.offsetWidth;
-          htmlRack.classList.add("shine-effect");
 
           const specialImg = document.createElement("img");
-          specialImg.src = "./Golden_skull.png";
+          specialImg.src = "./Golden_skull.png"; // <-- Place this file in the same directory
           specialImg.id = "superBadgeIcon";
           specialImg.className = "super-icon";
           meritRack.appendChild(specialImg);
@@ -580,9 +541,8 @@
 
           const allRackText = meritRack.querySelectorAll("p");
           allRackText.forEach(p => p.classList.add("super-text"));
+
         }
-
-
       }
 
 
@@ -614,15 +574,11 @@
 
         // Set the name dynamically in the preview
         const rackName = document.getElementById("rackName");
-        const isSuper = document.querySelectorAll('.badgeInput')
-          .filter(input => input.files.length > 0).length === maxBadges;
-
         if (nameInput) {
-          rackName.textContent = isSuper ? `Super Cadet ${nameInput}` : `Cadet ${nameInput}`;
+          rackName.textContent = `Cadet ${nameInput}`;
         } else {
-          rackName.textContent = "No Name Provided";
+          rackName.textContent = "No Name Provided"; // Fallback if no name
         }
-
 
         // Set the filename
         const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
