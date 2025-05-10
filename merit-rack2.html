@@ -567,8 +567,14 @@
 
         // Set the name dynamically in the preview
         const rackName = document.getElementById("rackName");
+        const badgeCount = document.querySelectorAll(".badgeInput")
+          ? Array.from(document.querySelectorAll(".badgeInput")).filter(input => input.files.length > 0).length
+          : 0;
+        
         if (nameInput) {
-          rackName.textContent = `Cadet ${nameInput}`;
+          rackName.textContent = badgeCount === maxBadges
+            ? `Super Cadet ${nameInput}`
+            : `Cadet ${nameInput}`;
         } else {
           rackName.textContent = "No Name Provided"; // Fallback if no name
         }
