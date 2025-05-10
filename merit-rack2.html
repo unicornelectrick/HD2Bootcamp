@@ -615,11 +615,15 @@
 
         // Set the name dynamically in the preview
         const rackName = document.getElementById("rackName");
+        const isSuper = document.querySelectorAll('.badgeInput')
+          .filter(input => input.files.length > 0).length === maxBadges;
+
         if (nameInput) {
-          rackName.textContent = `Cadet ${nameInput}`;
+          rackName.textContent = isSuper ? `Super Cadet ${nameInput}` : `Cadet ${nameInput}`;
         } else {
-          rackName.textContent = "No Name Provided"; // Fallback if no name
+          rackName.textContent = "No Name Provided";
         }
+
 
         // Set the filename
         const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
