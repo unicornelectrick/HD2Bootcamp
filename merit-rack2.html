@@ -399,6 +399,41 @@
     .merit-badge-rack.super-rack-inner {
       border: 1px double #d1a73c !important;
     }
+
+    /* Animation only shows in HTML preview and not in the download */
+    #htmlRackPreview.shine-effect {
+      position: relative;
+      overflow: hidden;
+    }
+
+    #htmlRackPreview.shine-effect::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      z-index: 100;
+      /* Ensure it's above everything */
+      background: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      transform: skewX(-20deg);
+      animation: shine 1.8s ease-out 0s 1 forwards;
+      pointer-events: none;
+    }
+
+
+    @keyframes shine {
+      from {
+        left: -75%;
+      }
+
+      to {
+        left: 125%;
+      }
+    }
   </style>
 </head>
 
@@ -528,12 +563,10 @@
           document.querySelector(".outer-border").classList.add("super-rack-border");
           meritRack.classList.add("super-rack-inner");
 
-
-          const specialImg = document.createElement("img");
-          specialImg.src = "./Golden_skull.png"; // <-- Place this file in the same directory
-          specialImg.id = "superBadgeIcon";
-          specialImg.className = "super-icon";
-          meritRack.appendChild(specialImg);
+          const htmlRack = document.getElementById("htmlRackPreview");
+          htmlRack.classList.remove("shine-effect");
+          void htmlRack.offsetWidth;
+          htmlRack.classList.add("shine-effect");
 
           if (nameInput) {
             rackName.textContent = `Super Cadet ${nameInput}`;
@@ -542,8 +575,8 @@
 
           const allRackText = meritRack.querySelectorAll("p");
           allRackText.forEach(p => p.classList.add("super-text"));
-
         }
+
       }
 
 
