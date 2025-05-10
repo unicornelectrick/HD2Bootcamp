@@ -535,21 +535,24 @@
         }
       }
 
-
       function waitForImagesAndDownload(element, filename) {
         const images = element.querySelectorAll('img');
         const promises = [];
-
+      
         images.forEach((img) => {
-          if (!img.complete) {
+          if (!img.complete || img.naturalWidth === 0) {
             promises.push(new Promise((resolve) => {
               img.onload = img.onerror = resolve;
             }));
           }
         });
-
+      
         Promise.all(promises).then(() => {
-          html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
+          html2canvas(element, {
+            backgroundColor: null,
+            allowTaint: true,
+            useCORS: true
+          }).then(canvas => {
             const link = document.createElement("a");
             link.download = filename;
             link.href = canvas.toDataURL("image/png");
@@ -590,7 +593,7 @@
         badgeContent.innerHTML = '';
 
         const rackName = document.getElementById("rackName");
-        rackName.textContent = "";
+        rackName.innerHTML = "";
 
         const meritRack = document.querySelector(".merit-badge-rack");
         meritRack.classList.remove("super-rack");
