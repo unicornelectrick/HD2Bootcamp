@@ -203,11 +203,8 @@
       font-family: sans-serif;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
       border: 2px solid #fce650;
-
       background: #222325;
-
       padding: .5rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
@@ -362,6 +359,77 @@
       position: relative;
       top: -12px;
     }
+
+    .super-rack {
+      background: linear-gradient(90deg, #d1a73c, #a37208, #6a4715, #2e1d06);
+      background-size: cover;
+      background-blend-mode: overlay;
+    }
+
+    .super-icon {
+      position: absolute;
+      top: -18px;
+      right: -20px;
+      width: 85px;
+      height: 85px;
+      z-index: 10;
+    }
+
+    .super-text {
+      color: #2e1d06 !important;
+      font-weight: 600 !important;
+    }
+
+    .super-border-box {
+      background: #5d3d10 !important;
+      border: 1px solid #f3df68 !important;
+    }
+
+    .super-corner {
+      border-color: #f3df68 transparent transparent transparent !important;
+    }
+
+    .outer-border.super-rack-border {
+      border: 2px solid #d1a73c !important;
+    }
+    
+    .merit-badge-rack.super-rack-inner {
+      border: 1px double #d1a73c !important;
+    }
+
+    #htmlRackPreview.shine-effect {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #htmlRackPreview.shine-effect::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      z-index: 100; /* Ensure it's above everything */
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: skewX(-20deg);
+      animation: shine 1.8s ease-out 0s 1 forwards;
+      pointer-events: none;
+    }
+
+    @keyframes shine {
+      from {
+        left: -75%;
+      }
+      to {
+        left: 125%;
+      }
+    }
+
   </style>
 </head>
 
@@ -441,15 +509,32 @@
       function updateHtmlRack() {
         badgeContent.innerHTML = '';
         const inputs = Array.from(document.querySelectorAll('.badgeInput')).reverse();
+        const meritRack = document.querySelector(".merit-badge-rack");
+        const rackName = document.getElementById("rackName");
+
+        // Reset any special styles or added icons
+        meritRack.classList.remove("super-rack");
+        const oldIcon = document.getElementById("superBadgeIcon");
+        if (oldIcon) oldIcon.remove();
+
+        let nameInput = document.getElementById("recruitName").value.trim();
+        rackName.textContent = nameInput ? `Cadet ${nameInput}` : "";
+
         inputs.forEach(input => {
           if (input.files[0]) {
             const box = document.createElement('div');
             box.className = 'border-box';
+            if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
+              box.classList.add('super-border-box');
+            }
 
             const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
             corners.forEach(corner => {
               const cornerDiv = document.createElement('div');
               cornerDiv.className = `corner ${corner}`;
+              if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
+                cornerDiv.classList.add('super-corner');
+              }
               box.appendChild(cornerDiv);
             });
 
@@ -466,22 +551,53 @@
             badgeContent.appendChild(box);
           }
         });
+
+        // Apply 5th badge bonus features
+        if (inputs.filter(input => input.files.length > 0).length === maxBadges) {
+          meritRack.classList.add("super-rack");
+          document.querySelector(".outer-border").classList.add("super-rack-border");
+          meritRack.classList.add("super-rack-inner");
+
+          const htmlRack = document.getElementById("htmlRackPreview");
+          htmlRack.classList.remove("shine-effect"); // Reset first
+          void htmlRack.offsetWidth; // Force reflow to restart animation
+          htmlRack.classList.add("shine-effect");
+
+          const specialImg = document.createElement("img");
+          specialImg.src = "./Golden_skull.png";
+          specialImg.id = "superBadgeIcon";
+          specialImg.className = "super-icon";
+          meritRack.appendChild(specialImg);
+
+          if (nameInput) {
+            rackName.textContent = `Super Cadet ${nameInput}`;
+            rackName.classList.add("super-text");
+          }
+
+          const allRackText = meritRack.querySelectorAll("p");
+          allRackText.forEach(p => p.classList.add("super-text"));
+
+        }
       }
 
       function waitForImagesAndDownload(element, filename) {
         const images = element.querySelectorAll('img');
         const promises = [];
-
+      
         images.forEach((img) => {
-          if (!img.complete) {
+          if (!img.complete || img.naturalWidth === 0) {
             promises.push(new Promise((resolve) => {
               img.onload = img.onerror = resolve;
             }));
           }
         });
-
+      
         Promise.all(promises).then(() => {
-          html2canvas(element, { backgroundColor: null, allowTaint: true, useCORS: true }).then(canvas => {
+          html2canvas(element, {
+            backgroundColor: null,
+            allowTaint: true,
+            useCORS: true
+          }).then(canvas => {
             const link = document.createElement("a");
             link.download = filename;
             link.href = canvas.toDataURL("image/png");
@@ -496,11 +612,18 @@
 
         // Set the name dynamically in the preview
         const rackName = document.getElementById("rackName");
+        const badgeCount = document.querySelectorAll(".badgeInput")
+          ? Array.from(document.querySelectorAll(".badgeInput")).filter(input => input.files.length > 0).length
+          : 0;
+        
         if (nameInput) {
-          rackName.textContent = `Cadet ${nameInput}`;
+          rackName.textContent = badgeCount === maxBadges
+            ? `Super Cadet ${nameInput}`
+            : `Cadet ${nameInput}`;
         } else {
           rackName.textContent = "No Name Provided"; // Fallback if no name
         }
+
 
         // Set the filename
         const filename = nameInput ? `${nameInput}_HD2BC25_MeritBadge_Rack.png` : "helldivers2_merit_rack.png";
@@ -520,9 +643,23 @@
         document.getElementById("recruitName").value = "";
         badgeInputsDiv.innerHTML = '<input type="file" accept="image/*" class="badgeInput" onchange="addNextBadgeInput(this)" />';
         badgeContent.innerHTML = '';
-        document.getElementById("rackName").textContent = "";
 
+        const rackName = document.getElementById("rackName");
+        rackName.innerHTML = "";
+
+        const meritRack = document.querySelector(".merit-badge-rack");
+        meritRack.classList.remove("super-rack");
+
+        const oldIcon = document.getElementById("superBadgeIcon");
+        if (oldIcon) oldIcon.remove();
+
+        // Remove super-text class from all <p> inside merit-badge-rack
+        const allRackText = document.querySelectorAll(".merit-badge-rack p");
+        allRackText.forEach(p => p.classList.remove("super-text"));
+
+        document.getElementById("htmlRackPreview").classList.remove("shine-effect");
       }
+
     </script>
   </div>
 </body>
